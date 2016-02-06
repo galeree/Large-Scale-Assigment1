@@ -1,6 +1,3 @@
-.	72	hdfs://localhost:9000/input/test.txt
-.	3	hdfs://localhost:9000/input/test2.txt
-?	4	hdfs://localhost:9000/input/test.txt
 กระทำ	1	hdfs://localhost:9000/input/test2.txt
 กลับ	2	hdfs://localhost:9000/input/test.txt
 กลับ	10	hdfs://localhost:9000/input/test2.txt

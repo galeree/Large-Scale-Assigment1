@@ -16,7 +16,7 @@ def reducer():
 		count, word = line.split('\t')
 		
 		if current_count < 100:
-			print '%s\t%s' % (word, count)
+			print word
 			current_count += 1
 
 if __name__ == '__main__':

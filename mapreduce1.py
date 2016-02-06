@@ -46,6 +46,7 @@ def mapper():
   			print word.encode('utf-8')+','+filename+'\t'+str(1)
 
 def reducer():
+  symbol = "~`!@#$%^&*()_-+={}[]:>;',</?*-+.ๆฯ"
   current_word = None
   current_count = 0
   word = None
@@ -65,13 +66,21 @@ def reducer():
     else:
       if current_word:
         current_key, current_filename = current_word.split(',')
-        print '%s\t%s\t%s' % (current_key, current_count, current_filename)
+        if len(current_key) == 1:
+          if current_key not in symbol:
+            print '%s\t%s\t%s' % (current_key, current_count, current_filename)
+        else:
+          print '%s\t%s\t%s' % (current_key, current_count, current_filename)
       current_count = count
       current_word = word
 
   if current_word == word:
     current_key, current_filename = current_word.split(',')
-    print '%s\t%s\t%s' % (current_key, current_count, current_filename)
+    if len(current_key) == 1:
+      if current_key not in symbol:
+        print '%s\t%s\t%s' % (current_key, current_count, current_filename)
+    else:
+      print '%s\t%s\t%s' % (current_key, current_count, current_filename)
 
 if __name__ == '__main__':
   option = sys.argv[1]
