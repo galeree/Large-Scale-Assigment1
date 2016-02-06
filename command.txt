@@ -23,3 +23,11 @@ hadoop jar /usr/local/Cellar/hadoop/2.7.1/libexec/share/hadoop/tools/lib/hadoop-
 -mapper "./mapreduce4.py mapper" \
 -reducer "./mapreduce4.py reducer" \
 -input /sum/part-00000 -output /filter
+
+hadoop jar /usr/local/Cellar/hadoop/2.7.1/libexec/share/hadoop/tools/lib/hadoop-streaming-2.7.1.jar \
+-D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator \
+-D stream.num.map.output.key.fields=2 \
+-D mapred.text.key.comparator.options='-k1,1 -k2,2' \
+-mapper "./mapreduce5.py mapper" \
+-reducer "./mapreduce5.py reducer" \
+-input /sort/part-00000 -output /feature
