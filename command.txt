@@ -1,12 +1,25 @@
 hadoop jar /usr/local/Cellar/hadoop/2.7.1/libexec/share/hadoop/tools/lib/hadoop-streaming-2.7.1.jar \
--mapper ./mapper.py \
--reducer ./reducer.py \
+-mapper "./mapreduce1.py mapper" \
+-reducer "./mapreduce1.py reducer" \
 -input /input/* -output /output
 
 hadoop jar /usr/local/Cellar/hadoop/2.7.1/libexec/share/hadoop/tools/lib/hadoop-streaming-2.7.1.jar \
--jobconf mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator \
--jobconf stream.num.map.output.key.fields=2 \
--jobconf mapred.text.key.comparator.options='-k1,1 -k2,2nr' \
--mapper ./mapper_sort.py \
--reducer ./reducer_sort.py \
+-D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator \
+-D stream.num.map.output.key.fields=2 \
+-D mapred.text.key.comparator.options='-k1,1 -k2,2nr' \
+-mapper "./mapreduce2.py mapper" \
+-reducer "./mapreduce2.py reducer" \
 -input /output/part-00000 -output /sort
+
+hadoop jar /usr/local/Cellar/hadoop/2.7.1/libexec/share/hadoop/tools/lib/hadoop-streaming-2.7.1.jar \
+-mapper "./mapreduce3.py mapper" \
+-reducer "./mapreduce3.py reducer" \
+-input /sort/part-00000 -output /sum
+
+hadoop jar /usr/local/Cellar/hadoop/2.7.1/libexec/share/hadoop/tools/lib/hadoop-streaming-2.7.1.jar \
+-D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator \
+-D stream.num.map.output.key.fields=1 \
+-D mapred.text.key.comparator.options='-k1,1nr' \
+-mapper "./mapreduce4.py mapper" \
+-reducer "./mapreduce4.py reducer" \
+-input /sum/part-00000 -output /filter
