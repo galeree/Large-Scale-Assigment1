@@ -2,13 +2,16 @@
 
 import sys
 import fileinput
+from subprocess import Popen, PIPE
 
 # Path to top100 word
-word_file = "/Users/Galle/Large-Scale-Assigment1/Result/result4.txt"
 def_dicts = []
+cat = Popen(["hdfs", "dfs", "-cat", "/filter/part-00000"], stdout=PIPE)
 
-for line in fileinput.input([word_file]):
+for line in cat.stdout:
 	def_dicts.append(line.strip())
+
+cat.stdout.close()
 
 def mapper():
 	current_filename = None
@@ -32,8 +35,26 @@ def mapper():
 
 
 def reducer():
+	current_filename = None
+	flag = 0
+	attributes = []
 	for line in sys.stdin:
-		print line.strip()
+		line = line.strip()
+		filename, word, count = line.split('\t')
+		if filename != current_filename and flag == 1:
+			row = current_filename
+			for attribute in attributes:
+				row += '\t' + attribute
+			print row
+			attributes = []
+		flag = 1
+		attributes.append(count)
+		current_filename = filename
+
+	row = current_filename
+	for attribute in attributes:
+		row += '\t' + attribute
+	print row
 
 
 if __name__ == '__main__':
