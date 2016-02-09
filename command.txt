@@ -34,3 +34,5 @@ hadoop jar /usr/local/Cellar/hadoop/2.7.1/libexec/share/hadoop/tools/lib/hadoop-
 -mapper "./mapreduce5.py mapper" \
 -reducer "./mapreduce5.py reducer" \
 -input /sort/part-00000 -output /feature
+
+hadoop jar mapreduce.jar
