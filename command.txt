@@ -1,4 +1,7 @@
 hadoop jar /usr/local/Cellar/hadoop/2.7.1/libexec/share/hadoop/tools/lib/hadoop-streaming-2.7.1.jar \
+-D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator \
+-D stream.num.map.output.key.fields=2 \
+-D mapred.text.key.comparator.options='-k1,1 -k2,2' \
 -mapper "./mapreduce1.py mapper" \
 -reducer "./mapreduce1.py reducer" \
 -input /input/* -output /output

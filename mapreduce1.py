@@ -43,44 +43,43 @@ def mapper():
   	for item in items:
   		words = wrap(item)
   		for word in words:
-  			print word.encode('utf-8')+','+filename+'\t'+str(1)
+  			print word.encode('utf-8')+'\t'+filename+'\t'+str(1)
 
 def reducer():
   symbol = "~`!@#$%^&*()_-+={}[]:>;',</?*-+.ๆฯ"
-  current_word = None
+  current_key = None
   current_count = 0
-  word = None
-  filename = None
+  key = None
 
   for line in sys.stdin:
     line = line.strip()
-    word, count = line.split('\t',1)
-
+    word, filename, count = line.split('\t')
+    key = word + '\t' + filename
     try:
       count = int(count)
     except ValueError:
       continue
 
-    if current_word == word:
+    if current_key == key:
       current_count += count
     else:
-      if current_word:
-        current_key, current_filename = current_word.split(',')
-        if len(current_key) == 1:
-          if current_key not in symbol:
-            print '%s\t%s\t%s' % (current_key, current_count, current_filename)
+      if current_key:
+        current_word, current_filename = current_key.split('\t')
+        if len(current_word) == 1:
+          if current_word not in symbol:
+            print '%s\t%s\t%s' % (current_word, current_count, current_filename)
         else:
-          print '%s\t%s\t%s' % (current_key, current_count, current_filename)
+          print '%s\t%s\t%s' % (current_word, current_count, current_filename)
       current_count = count
-      current_word = word
+      current_key = key
 
-  if current_word == word:
-    current_key, current_filename = current_word.split(',')
-    if len(current_key) == 1:
-      if current_key not in symbol:
-        print '%s\t%s\t%s' % (current_key, current_count, current_filename)
+  if current_key == key:
+    current_word, current_filename = current_key.split('\t')
+    if len(current_word) == 1:
+      if current_word not in symbol:
+        print '%s\t%s\t%s' % (current_word, current_count, current_filename)
     else:
-      print '%s\t%s\t%s' % (current_key, current_count, current_filename)
+      print '%s\t%s\t%s' % (current_word, current_count, current_filename)
 
 if __name__ == '__main__':
   option = sys.argv[1]
