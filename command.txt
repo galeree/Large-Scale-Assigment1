@@ -35,4 +35,14 @@ hadoop jar /usr/local/Cellar/hadoop/2.7.1/libexec/share/hadoop/tools/lib/hadoop-
 -reducer "./mapreduce5.py reducer" \
 -input /sort/part-00000 -output /feature
 
+
 hadoop jar mapreduce.jar
+hadoop jar kmeans.jar
+
+hadoop jar /usr/local/Cellar/hadoop/2.7.1/libexec/share/hadoop/tools/lib/hadoop-streaming-2.7.1.jar \
+-D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator \
+-D stream.num.map.output.key.fields=1 \
+-D mapred.text.key.comparator.options='-k1,1' \
+-mapper "./mapreduce7.py mapper /result" \
+-reducer "./mapreduce7.py reducer" \
+-input /feature/part-00000 -output /cluster
