@@ -3,16 +3,16 @@
 import sys
 from subprocess import Popen, PIPE
 
-# Path to top100 word
-def_dicts = []
-cat = Popen(["hdfs", "dfs", "-cat", "/filter/part-00000"], stdout=PIPE)
-
-for line in cat.stdout:
-	def_dicts.append(line.strip())
-
-cat.stdout.close()
-
 def mapper():
+	# Path to top100 word
+	def_dicts = []
+	cat = Popen(["hdfs", "dfs", "-cat", "/user/hadoop/project_dekd/filter/part-00000"], stdout=PIPE)
+
+	for line in cat.stdout:
+		def_dicts.append(line.strip())
+
+	cat.stdout.close()
+	
 	current_filename = None
 	dicts = list(def_dicts)
 	flag = 0

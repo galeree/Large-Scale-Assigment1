@@ -1,3 +1,80 @@
+hadoop jar /home/hadoop/hadoop/share/hadoop/tools/lib/hadoop-streaming-2.6.0.jar \
+-D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator \
+-D stream.num.map.output.key.fields=2 \
+-D mapred.text.key.comparator.options='-k1,1 -k2,2' \
+-mapper "/home/hadoop/clustering/mapreduce/mapreduce1.py mapper" \
+-reducer "/home/hadoop/clustering/mapreduce/mapreduce1.py reducer" \
+-file "/home/hadoop/clustering/mapreduce/mapreduce1.py" \
+-input /user/hadoop/project_dekd/input/* \
+-output /user/hadoop/project_dekd/output
+
+Real data
+HADOOP_CLIENT_OPTS="-Xmx1024M" hadoop jar /home/hadoop/hadoop/share/hadoop/tools/lib/hadoop-streaming-2.6.0.jar \
+-D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator \
+-D stream.num.map.output.key.fields=2 \
+-D mapred.text.key.comparator.options='-k1,1 -k2,2' \
+-mapper "/home/hadoop/clustering/mapreduce/mapreduce1.py mapper" \
+-reducer "/home/hadoop/clustering/mapreduce/mapreduce1.py reducer" \
+-file "/home/hadoop/clustering/mapreduce/mapreduce1.py" \
+-input /user/hadoop/DekD/story*/story*/*.txt \
+-output /user/hadoop/project_dekd/output
+
+Demo data
+hadoop jar /home/hadoop/hadoop/share/hadoop/tools/lib/hadoop-streaming-2.6.0.jar \
+-D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator \
+-D stream.num.map.output.key.fields=2 \
+-D mapred.text.key.comparator.options='-k1,1 -k2,2' \
+-mapper "/home/hadoop/clustering/mapreduce/mapreduce1.py mapper" \
+-reducer "/home/hadoop/clustering/mapreduce/mapreduce1.py reducer" \
+-file "/home/hadoop/clustering/mapreduce/mapreduce1.py" \
+-input /user/hadoop/DekD/story_longcon_83/story_960028/story_960028.txt \
+-output /user/hadoop/project_dekd/output
+
+hadoop jar /home/hadoop/hadoop/share/hadoop/tools/lib/hadoop-streaming-2.6.0.jar \
+-D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator \
+-D stream.num.map.output.key.fields=2 \
+-D mapred.text.key.comparator.options='-k1,1 -k2,2nr' \
+-mapper "/home/hadoop/clustering/mapreduce/mapreduce2.py mapper" \
+-reducer "/home/hadoop/clustering/mapreduce/mapreduce2.py reducer" \
+-file "/home/hadoop/clustering/mapreduce/mapreduce2.py" \
+-input /user/hadoop/project_dekd/output/part-00000 \
+-output /user/hadoop/project_dekd/sort
+
+hadoop jar /home/hadoop/hadoop/share/hadoop/tools/lib/hadoop-streaming-2.6.0.jar \
+-mapper "./mapreduce3.py mapper" \
+-reducer "./mapreduce3.py reducer" \
+-file "/home/hadoop/clustering/mapreduce/mapreduce3.py" \
+-input /user/hadoop/project_dekd/sort/part-00000 -output /user/hadoop/project_dekd/sum
+
+hadoop jar /home/hadoop/hadoop/share/hadoop/tools/lib/hadoop-streaming-2.6.0.jar \
+-D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator \
+-D stream.num.map.output.key.fields=1 \
+-D mapred.text.key.comparator.options='-k1,1nr' \
+-mapper "./mapreduce4.py mapper" \
+-reducer "./mapreduce4.py reducer" \
+-file "/home/hadoop/clustering/mapreduce/mapreduce4.py" \
+-input /user/hadoop/project_dekd/sum/part-00000 -output /user/hadoop/project_dekd/filter
+
+hadoop jar /home/hadoop/hadoop/share/hadoop/tools/lib/hadoop-streaming-2.6.0.jar \
+-files "/home/hadoop/clustering/mapreduce/mapreduce5.py,hdfs://172.16.2.1:9000/user/hadoop/project_dekd/filter/part-00000" \
+-D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator \
+-D stream.num.map.output.key.fields=2 \
+-D mapred.text.key.comparator.options='-k1,1 -k2,2' \
+-mapper "./mapreduce5.py mapper" \
+-reducer "./mapreduce5.py reducer" \
+-input /user/hadoop/project_dekd/sort/part-00000 -output /user/hadoop/project_dekd/feature
+
+hadoop jar /home/hadoop/hadoop/share/hadoop/tools/lib/hadoop-streaming-2.6.0.jar \
+-files "/home/hadoop/clustering/mapreduce/mapreduce6.py" \
+-D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator \
+-D stream.num.map.output.key.fields=2 \
+-D mapred.text.key.comparator.options='-k1,1 -k2,2' \
+-mapper "./mapreduce6.py mapper" \
+-reducer "./mapreduce6.py reducer" \
+-input /user/hadoop/project_dekd/feature/part-00000 \
+-output /user/hadoop/project_dekd/result
+
+// Step1
 hadoop jar /usr/local/Cellar/hadoop/2.7.1/libexec/share/hadoop/tools/lib/hadoop-streaming-2.7.1.jar \
 -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator \
 -D stream.num.map.output.key.fields=2 \
@@ -6,6 +83,7 @@ hadoop jar /usr/local/Cellar/hadoop/2.7.1/libexec/share/hadoop/tools/lib/hadoop-
 -reducer "./mapreduce1.py reducer" \
 -input /input/* -output /output
 
+// Step2
 hadoop jar /usr/local/Cellar/hadoop/2.7.1/libexec/share/hadoop/tools/lib/hadoop-streaming-2.7.1.jar \
 -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator \
 -D stream.num.map.output.key.fields=2 \
@@ -14,11 +92,13 @@ hadoop jar /usr/local/Cellar/hadoop/2.7.1/libexec/share/hadoop/tools/lib/hadoop-
 -reducer "./mapreduce2.py reducer" \
 -input /output/part-00000 -output /sort
 
+// Step3
 hadoop jar /usr/local/Cellar/hadoop/2.7.1/libexec/share/hadoop/tools/lib/hadoop-streaming-2.7.1.jar \
 -mapper "./mapreduce3.py mapper" \
 -reducer "./mapreduce3.py reducer" \
 -input /sort/part-00000 -output /sum
 
+// Step4
 hadoop jar /usr/local/Cellar/hadoop/2.7.1/libexec/share/hadoop/tools/lib/hadoop-streaming-2.7.1.jar \
 -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator \
 -D stream.num.map.output.key.fields=1 \
@@ -27,6 +107,7 @@ hadoop jar /usr/local/Cellar/hadoop/2.7.1/libexec/share/hadoop/tools/lib/hadoop-
 -reducer "./mapreduce4.py reducer" \
 -input /sum/part-00000 -output /filter
 
+// Step5
 hadoop jar /usr/local/Cellar/hadoop/2.7.1/libexec/share/hadoop/tools/lib/hadoop-streaming-2.7.1.jar \
 -D mapred.output.key.comparator.class=org.apache.hadoop.mapred.lib.KeyFieldBasedComparator \
 -D stream.num.map.output.key.fields=2 \

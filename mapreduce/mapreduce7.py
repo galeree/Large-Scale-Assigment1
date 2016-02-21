@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 
 import sys
-from subprocess import Popen, PIPE
 
-def mapper(path):
+def mapper():
 	centers = []
-	cat = Popen(["hdfs", "dfs", "-cat", path], stdout=PIPE)
-
-	for line in cat.stdout:
+	fo = open("part-00000", "r")
+	for line in fo:
 		line = line.strip()
 		line = line.split('\t')
 		value = []
@@ -40,15 +38,41 @@ def mapper(path):
 			print row
 
 def reducer():
+	current_cluster = None
+	cluster = None
+	current_sum = [0]*100
+	num_point = 0
+	flag = 0
 	for line in sys.stdin:
 		line = line.strip()
-		print line
+		line = line.split('\t')
+		cluster = (int)(line[0])
+		point = line[1:]
+		
+		for i in range(0,len(point)):
+			current_sum[i] += (float)(point[i])
+
+		if cluster != current_cluster and flag == 1:
+			row = ""
+			for i in range(0,len(current_sum)):
+				row += (str)((float)(current_sum[i]/num_point)) + '\t'
+			print row.strip()
+			num_point = 0
+			current_sum = [0]*100
+
+		current_cluster = cluster
+		num_point += 1
+		flag = 1
+
+	row = ""
+	for i in range(0,len(current_sum)):
+		row += (str)((float)(current_sum[i]/num_point)) + '\t'
+	print row.strip()
 
 
 if __name__ == '__main__':
 	option = sys.argv[1]
-	param = sys.argv[2]
 	if option == "mapper":
-   		mapper(param)
+   		mapper()
    	else:
    		reducer()

@@ -43,7 +43,9 @@ def mapper():
   	for item in items:
   		words = wrap(item)
   		for word in words:
-  			print word.encode('utf-8')+'\t'+filename+'\t'+str(1)
+        searchObj = re.search('[a-zA-Z]',word)
+        if ~searchObj:
+  			 print word.encode('utf-8')+'\t'+filename+'\t'+str(1)
 
 def reducer():
   symbol = "~`!@#$%^&*()_-+={}[]:>;',</?*-+.ๆฯ"

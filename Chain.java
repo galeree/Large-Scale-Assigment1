@@ -8,7 +8,8 @@ import org.apache.hadoop.streaming.StreamJob;
 
 public class Chain extends Configured implements Tool
 {
-    public static String path = "/Users/Galle/Large-Scale-Assigment1/";
+    public static String path = "/home/hadoop/clustering/mapreduce";
+    public static String output_path = "/user/hadoop/project_dekd";
     
 	@Override
 	public int run(String[] arg0) throws Exception {
@@ -19,8 +20,8 @@ public class Chain extends Configured implements Tool
 						"-jobconf"  , "mapred.text.key.comparator.options=-k1,1 -k2,2" ,
 						"-mapper"   , path+"mapreduce1.py mapper" ,
 				        "-reducer"  , path+"mapreduce1.py reducer" ,
-				        "-input"    , "/input/*" ,
-				        "-output"   , "/output" ,
+				        "-input"    , "DekD/*/*/*.txt" ,
+				        "-output"   , output_path+"/output" ,
 				};
 				        
 		JobConf job1Conf = StreamJob.createJob( job1);
@@ -33,8 +34,8 @@ public class Chain extends Configured implements Tool
 						"-jobconf"  , "mapred.text.key.comparator.options=-k1,1 -k2,2nr" ,
 						"-mapper"   , path+"mapreduce2.py mapper" ,
 			            "-reducer"  , path+"mapreduce2.py reducer" ,
-			            "-input"    , "/output/part-00000" ,
-			            "-output"   , "/sort" ,
+			            "-input"    , output_path+"/output/part-00000" ,
+			            "-output"   , output_path+"/sort" ,
 				};
 				        
 		JobConf job2Conf = StreamJob.createJob( job2);
@@ -44,8 +45,8 @@ public class Chain extends Configured implements Tool
 				{
 						"-mapper"   , path+"mapreduce3.py mapper" ,
 					    "-reducer"  , path+"mapreduce3.py reducer" ,
-					    "-input"    , "/sort/part-00000" ,
-					    "-output"   , "/sum"
+					    "-input"    , output_path+"/sort/part-00000" ,
+					    "-output"   , output_path+"/sum"
 				};
 						        
 		JobConf job3Conf = StreamJob.createJob( job3);
@@ -58,8 +59,8 @@ public class Chain extends Configured implements Tool
 						"-jobconf"  , "mapred.text.key.comparator.options=-k1,1nr" ,
 						"-mapper"   , path+"mapreduce4.py mapper" ,
 					    "-reducer"  , path+"mapreduce4.py reducer" ,
-					    "-input"    , "/sum/part-00000" ,
-					    "-output"   , "/filter"
+					    "-input"    , output_path+"/sum/part-00000" ,
+					    "-output"   , output_path+"/filter"
 				};
 						        
 		JobConf job4Conf = StreamJob.createJob( job4);
@@ -72,8 +73,8 @@ public class Chain extends Configured implements Tool
 						"-jobconf"  , "mapred.text.key.comparator.options=-k1,1 -k2,2" ,
 						"-mapper"   , path+"mapreduce5.py mapper" ,
 					    "-reducer"  , path+"mapreduce5.py reducer" ,
-					    "-input"    , "/sort/part-00000" ,
-					    "-output"   , "/feature"
+					    "-input"    , output_path+"/sort/part-00000" ,
+					    "-output"   , output_path+"/feature"
 				};
 						        
 		JobConf job5Conf = StreamJob.createJob( job5);
