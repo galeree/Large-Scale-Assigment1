@@ -1,18 +1,14 @@
 #!/usr/bin/env python
 
 import sys
-from subprocess import Popen, PIPE
 
 def mapper():
-	# Path to top100 word
 	def_dicts = []
-	cat = Popen(["hdfs", "dfs", "-cat", "/user/hadoop/project_dekd/filter/part-00000"], stdout=PIPE)
-
-	for line in cat.stdout:
+	fo = open("part-00000", "r")
+	for line in fo:
 		def_dicts.append(line.strip())
 
-	cat.stdout.close()
-	
+	fo.close()
 	current_filename = None
 	dicts = list(def_dicts)
 	flag = 0
@@ -32,28 +28,32 @@ def mapper():
 	for i in dicts:
 		print '%s\t%s\t%s' % (current_filename, i, 0)
 
-
 def reducer():
-	current_filename = None
-	flag = 0
-	attributes = []
-	for line in sys.stdin:
-		line = line.strip()
-		filename, word, count = line.split('\t')
-		if filename != current_filename and flag == 1:
-			row = current_filename
-			for attribute in attributes:
-				row += '\t' + attribute
-			print row
-			attributes = []
-		flag = 1
-		attributes.append(count)
-		current_filename = filename
+  current_key = None
+  current_count = 0
+  key = None
 
-	row = current_filename
-	for attribute in attributes:
-		row += '\t' + attribute
-	print row
+  for line in sys.stdin:
+    line = line.strip()
+    filename, word, count = line.split('\t')
+    key = word + '\t' + filename
+    try:
+      count = int(count)
+    except ValueError:
+      continue
+
+    if current_key == key:
+      current_count += count
+    else:
+      if current_key:
+        current_word, current_filename = current_key.split('\t')
+        print '%s\t%s\t%s' % (current_filename, current_word, current_count)
+      current_count = count
+      current_key = key
+
+  if current_key == key:
+    current_word, current_filename = current_key.split('\t')
+    print '%s\t%s\t%s' % (current_filename, current_word, current_count)
 
 
 if __name__ == '__main__':

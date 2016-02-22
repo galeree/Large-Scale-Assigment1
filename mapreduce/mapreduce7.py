@@ -13,8 +13,7 @@ def mapper():
 			value.append(float(line[i]))
 		
 		centers.append(value)
-
-	cat.stdout.close()
+	fo.close()
 
 	for line in sys.stdin:
 		line = line.strip()
