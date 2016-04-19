@@ -79,7 +79,7 @@ hadoop jar /home/hadoop/hadoop/share/hadoop/tools/lib/hadoop-streaming-2.6.0.jar
 -D stream.num.map.output.key.fields=1 \
 -D mapred.text.key.comparator.options='-k1,1' \
 -D mapred.reduce.tasks=0 \
--files "/home/hadoop/clustering/mapreduce/mapreduce7.py,hdfs://172.16.2.1:9000/user/hadoop/project_dekd/centroid/center-0/part-00000"
+-files "/home/hadoop/clustering/mapreduce/mapreduce7.py,hdfs://172.16.2.1:9000/user/hadoop/project_dekd/centroid/center-0/part-00000" \
 -mapper "./mapreduce7.py mapper" \
 -input /user/hadoop/project_dekd/result/part-00000 \
 -output /user/hadoop/project_dekd/centroid/center-x

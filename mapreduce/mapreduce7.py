@@ -31,10 +31,10 @@ def mapper():
 				min_diff = diff
 				cluster = i+1
 
-			row = str(cluster)
-			for j in range(0,len(point)):
-				row += '\t'+str(point[j])
-			print row
+		row = str(cluster)
+		for j in range(0,len(point)):
+			row += '\t'+str(point[j])
+		print row
 
 def reducer():
 	current_cluster = None
