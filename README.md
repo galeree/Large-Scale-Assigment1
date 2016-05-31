@@ -1,4 +1,9 @@
-#Dek-d Novel Word Count MapReduce
+# Novel Clustering
+This is a novel clustering script using Hadoop written in Python and Java
+
+# Structure
+- mapreduce
+- 
 1. Word Count for each file
 2. Finding top 100 words in each file
 3. Summation of all word counts
