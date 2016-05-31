@@ -1,9 +1,11 @@
 # Novel Clustering
 This is a novel clustering script using Hadoop written in Python and Java
 
-# Structure
-- mapreduce
-- 
+# Folder
+- mapreduce Contains map and reduce code written in Python.
+- Remote    Contains java code used to execute Python map-reduce file.
+
+# Map reduce step in each mapreduce#.py
 1. Word Count for each file
 2. Finding top 100 words in each file
 3. Summation of all word counts
