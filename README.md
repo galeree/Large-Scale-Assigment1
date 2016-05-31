@@ -1,9 +1,10 @@
 # Novel Clustering
-This is a novel clustering script using Hadoop written in Python and Java
+This is a novel clustering script used for Hadoop written in Python and Java
 
 # Folder
-- mapreduce Contains map and reduce code written in Python.
-- Remote    Contains java code used to execute Python map-reduce file.
+- mapreduce    Contains map and reduce code written in Python.
+- Remote       Contains java code used to execute Python map-reduce file.
+- command.txt Important hadoop command for each mapreduce step.
 
 # Map reduce step in each mapreduce#.py
 1. Word Count for each file
